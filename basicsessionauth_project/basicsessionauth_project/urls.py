@@ -20,18 +20,9 @@ from testapp import views
 router = routers.DefaultRouter()
 
 router.register('api',views.EmployeeCRUDCBV)
-from rest_framework.authtoken import views
-
-
-from rest_framework_jwt.views import obtain_jwt_token,refresh_jwt_token,verify_jwt_token
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include(router.urls)),
-    # path('get-api-token/',views.obtain_auth_token,name='get-api-token')
-    path('auth-jwt/',obtain_jwt_token,name='auth-token'),
-    path('auth-jwt-refresh/',refresh_jwt_token,name='refresh_jwt_token'),
-    path('auth-jwt-verify/',verify_jwt_token,name='verify_jwt_token')
-
+    path('accounts/',include('django.contrib.auth.urls'))
 ]

@@ -428,6 +428,185 @@ class XYZPermission(BasePermission):
 	
 
 
+JWT Authentication:
+-------------------
+
+1. access_token
+2. refresh token
+3. verify
+
+we need to import from this
+
+from rest_framework_jwt.views import
+		obtain_jwt_token,
+		refresh_jwt_token,
+		verify_jwt_token
+
+	path('auth-jwt/',obtain_jwt_token,name='auth-jwt-verifyoken'),
+    path('auth-jwt-refresh/',refresh_jwt_token,name='refresh_jwt_token'),
+    path('auth-jwt-verify/',verify_jwt_token,name='verify_jwt_token')
+
+To refresh the token you must need to add in settings.py
+
+JWT_AUTH = {
+	
+	'JWT_ALLOW_REFRESH': True,
+}
+
+
+
+Custom Authentication:
+------------------------
+
+1. Custom Authentication class by extending from BaseAuthentication
+
+2. you have to override the authenticate() method.
+
+3. Return tuple: (user, None)
+
+4. raise AuthenticationFailed exception
+
+
+
+Pagination DRF:
+---------------
+
+1. PageNumberPagination
+2. LimitOffsetPagination
+3. CursorPagination
+
+
+Enable pagination globally:
+---------------------------
+
+settings.py
+
+REST_FRAMEWORK = {
+	'DEFAULT_PAGINATION_CLASS':'rest_framewrok.pagination.pageNumberPagination'
+	'PAGE_SIZE': 10
+}
+
+
+
+Enable pagination Locally:
+---------------------------
+
+class EmployeeAPIView(generics.ListAPIView):
+	pagination_class = PageNumberPagination
+
+2. LimitOffsetPagination:
+-------------------------
+
+	default_limit = 15
+	limit_query_param = 'mylimit' # default value is limit
+	offset_query_param = "myoffset" # default value is offset
+	max_limit = 20
+
+3. CursorPagination:
+--------------------
+
+To get all records according to ascending order of employee salaries but per page 5
+
+
+DRF- Filtering:
+--------------
+Searching/Filtering and Ordering:
+--------------------------------
+
+eg: All the records where ename contains Jhon
+
+
+1. Plain Vanilla Filtering:
+2. By using DRF API
+
+
+1. Plain Vanilla Filtering:
+---------------------------
+
+By overriding get_queryset() method.
+
+http://localhost:8000/api/?ename=Jhon
+
+
+2. By using DRF API:
+--------------------
+you have to import rest_framework.filters import SearchFilter in settings.py 
+
+
+to query with fields
+
+1. search_fields = ('eno',) # any
+2. search_fields = ('^eno',) # starts with
+3. serac_fields = ('=eno',) # exactly match
+
+Ordering:
+----------
+if you want to add ordering as well to the searching, add Ordering Filter to the settings.py
+
+
+
+Nested Serializers:
+------------------
+
+Sometimes we can use one serializer inside another serializer 
+
+if you have many to many, many to one, one to one relationships you can happily use the nested serializers.
+
+
+
+BasicAuthentication:
+-------------------
+Limitation:
+------------
+1. we can't customize the form (basically its a alert prompt)
+
+2. username and password are sending to server using base64 encoded format which is not secure. any one can decode it anytime.
+
+
+SessionAuthentication:
+-----------------------
+
+auth application
+
+If we want to use session authentication we need to add some imports in the django urls
+
+path('accounts/',include('django.contrib.auth.urls'))
+
+and we need to have one templates folders, in that registration folder and login.html file
+
+Next thing, once the login is successfully authenticated, we are by default redirecting to accounts/profile. if we want to redirect to our own path, we have to define in settings.py file "LOGIN_REDIRECT_URL" = "OUR_CUSTOM_PATH".
+
+
+
+
+
+Consuming Third party API from our Django application:
+-----------------------------------
+
+
+
+
+Swagger:
+--------
+
+1. pip install django-rest-swagger
+
+2. we have to add 'rest_framework_swagger' to settings.py
+
+3. urls.py
+----------
+
+from rest_framework_swagger.views import get_swagger_view
+
+schema_view = get_swagger_view(title='Employee API Functionality testing using swagger')
+
+urlpatterns=[
+
+path('docs/',schema_view)
+]
+
+
+
 
 
 
